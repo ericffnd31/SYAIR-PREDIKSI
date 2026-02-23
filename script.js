@@ -1,83 +1,66 @@
-// JAM WIB OTOMATIS
-function updateTime() {
-  const now = new Date();
-  const options = {
-    timeZone: "Asia/Jakarta",
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  };
+function generateHTML() {
+    const input = document.getElementById("inputData").value;
+    const lines = input.split("\n");
 
-  const waktu = new Intl.DateTimeFormat("id-ID", options).format(now) + " WIB";
+    let outputHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prediksi Bola</title>
+<style>
+body{background:#000;color:#fff;font-family:Courier New;padding:20px;}
+table{width:100%;border-collapse:collapse;}
+th,td{border:1px solid #444;padding:8px;text-align:center;}
+</style>
+</head>
+<body>
+<h2>Prediksi Bola Hari Ini (WIB)</h2>
+`;
 
-  document.querySelectorAll("#datetime").forEach(el => {
-    el.innerText = waktu;
-  });
+    let currentLeague = "";
+
+    lines.forEach(line => {
+        if(line.trim() === "") return;
+
+        if(!line.includes("|")){
+            currentLeague = line.trim();
+            outputHTML += `<h3>${currentLeague}</h3>`;
+            outputHTML += `<table>
+<tr>
+<th>Waktu (WIB)</th>
+<th>Pertandingan</th>
+<th>Prediksi Skor</th>
+</tr>`;
+        } else {
+            const parts = line.split("|");
+            const waktu = parts[0].trim() + " WIB";
+            const match = parts[1].trim();
+
+            const skor1 = Math.floor(Math.random()*4);
+            const skor2 = Math.floor(Math.random()*4);
+
+            outputHTML += `
+<tr>
+<td>${waktu}</td>
+<td>${match}</td>
+<td>${skor1} - ${skor2}</td>
+</tr>`;
+        }
+    });
+
+    outputHTML += `
+</table>
+</body>
+</html>`;
+
+    document.getElementById("preview").innerHTML = outputHTML;
+    document.getElementById("htmlOutput").value = outputHTML;
 }
 
-setInterval(updateTime, 1000);
-updateTime();
-
-
-// AI ANALISA SEDERHANA
-function aiAnalisa(team1, team2) {
-  const kuat = ["Manchester City", "Real Madrid", "Bayern", "Barcelona"];
-  
-  if (kuat.includes(team1)) return `${team1} unggul secara statistik dan performa.`;
-  if (kuat.includes(team2)) return `${team2} memiliki peluang menang lebih besar.`;
-
-  return "Pertandingan cukup seimbang, potensi seri cukup tinggi.";
-}
-
-
-// GENERATE TABEL PREDIKSI
-function generatePrediksi() {
-  const input = document.getElementById("matchInput").value.trim();
-  if (!input) return;
-
-  const matches = input.split("\n");
-
-  let html = `
-    <table>
-      <tr>
-        <th>Match</th>
-        <th>Prediksi Skor</th>
-        <th>AI Analisa</th>
-      </tr>
-  `;
-
-  matches.forEach(match => {
-    const teams = match.split("vs");
-    if (teams.length === 2) {
-      const t1 = teams[0].trim();
-      const t2 = teams[1].trim();
-
-      const skor1 = Math.floor(Math.random() * 4);
-      const skor2 = Math.floor(Math.random() * 4);
-
-      html += `
-        <tr>
-          <td>${t1} vs ${t2}</td>
-          <td>${skor1} - ${skor2}</td>
-          <td>${aiAnalisa(t1, t2)}</td>
-        </tr>
-      `;
-    }
-  });
-
-  html += "</table>";
-
-  document.getElementById("hasilPrediksi").innerHTML = html;
-}
-
-
-// COPY HTML
 function copyHTML() {
-  const content = document.getElementById("hasilPrediksi").innerHTML;
-  navigator.clipboard.writeText(content);
-  alert("HTML tabel berhasil dicopy!");
+    const textarea = document.getElementById("htmlOutput");
+    textarea.select();
+    document.execCommand("copy");
+    alert("HTML berhasil dicopy!");
 }
