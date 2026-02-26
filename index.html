@@ -9,6 +9,7 @@
 </head>
 <body>
 
+<div id="coinContainer"></div>
 <div class="bg"></div>
 
 <div class="container">
@@ -49,12 +50,15 @@
 <option value="pcso">PCSO</option>
 </select>
 
-<br>
+<br><br>
 
 <button onclick="generateSyair()">GENERATE</button>
 <button onclick="downloadPNG()">DOWNLOAD PNG</button>
 
 <div id="hasilSyair"></div>
+
+<h2>TABEL 12 SHIO</h2>
+<div id="shioTable" class="shio-grid"></div>
 
 </div>
 
@@ -69,14 +73,13 @@
 <input type="text" id="tim2" placeholder="Tim Away">
 <input type="text" id="skor" placeholder="Prediksi Skor (2 - 1)">
 
-<br>
+<br><br>
 
 <button onclick="generateBola()">GENERATE</button>
 <button onclick="copyHTML()">COPY HTML</button>
 
 <div id="hasilBola"></div>
-
-<textarea id="htmlOutput" style="width:90%;height:150px;margin-top:15px;"></textarea>
+<textarea id="htmlOutput"></textarea>
 
 </div>
 
