@@ -2,22 +2,23 @@ body{
 margin:0;
 font-family:Arial;
 background:black;
-color:gold;
+color:white;
 text-align:center;
+overflow-x:hidden;
 }
 
 .bg{
 position:fixed;
 width:100%;
 height:100%;
-background:linear-gradient(45deg,#300000,#000);
-animation:bgmove 5s infinite alternate;
+background:radial-gradient(circle, #300000, #000);
 z-index:-1;
+animation:bgPulse 4s infinite alternate;
 }
 
-@keyframes bgmove{
-0%{filter:hue-rotate(0deg);}
-100%{filter:hue-rotate(40deg);}
+@keyframes bgPulse{
+0%{filter:brightness(1);}
+100%{filter:brightness(1.3);}
 }
 
 .container{
@@ -25,49 +26,97 @@ padding:20px;
 }
 
 button{
-padding:10px 15px;
-margin:10px;
-background:red;
-border:none;
-color:white;
-cursor:pointer;
-border-radius:5px;
-}
-
-button:hover{
-background:darkred;
-}
-
-input, select{
-padding:10px;
+padding:10px 20px;
 margin:5px;
-border-radius:5px;
+background:gold;
 border:none;
+cursor:pointer;
+font-weight:bold;
 }
 
-.card{
-margin-top:20px;
-padding:25px;
-background:linear-gradient(#a40000,#6b0000);
-border-radius:20px;
-box-shadow:0 0 40px gold;
-display:inline-block;
-max-width:600px;
-width:90%;
+#jamWIB{
+margin-bottom:15px;
+font-size:18px;
 }
 
-table{
+.resultCard{
+background:#111;
+padding:20px;
+margin:20px auto;
+width:80%;
+border:3px solid gold;
+border-radius:10px;
+position:relative;
+box-shadow:0 0 20px gold;
+}
+
+.fireMode::after{
+content:"";
+position:absolute;
+bottom:0;
+left:0;
 width:100%;
-border-collapse:collapse;
-margin-top:15px;
+height:100%;
+background:radial-gradient(circle at bottom, rgba(255,69,0,0.5), transparent 60%);
+animation:fire 1.5s infinite alternate;
+pointer-events:none;
 }
 
-th, td{
-border:1px solid #333;
-padding:8px;
+@keyframes fire{
+0%{opacity:0.3;}
+100%{opacity:0.8;}
 }
 
-th{
-background:#b00909;
-color:white;
+.syairText{
+font-size:18px;
+white-space:pre-line;
+}
+
+.shio-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
+gap:10px;
+margin-top:20px;
+}
+
+.shio-item{
+background:#111;
+padding:10px;
+border:2px solid #333;
+transition:0.3s;
+}
+
+.shio-item img{
+width:60px;
+}
+
+.shio-active{
+border:2px solid gold;
+box-shadow:0 0 20px gold;
+}
+
+#coinContainer{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+}
+
+.coin{
+position:absolute;
+width:30px;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+0%{transform:translateY(-50px) rotate(0);}
+100%{transform:translateY(100vh) rotate(720deg);}
+}
+
+textarea{
+width:90%;
+height:150px;
+margin-top:10px;
 }
