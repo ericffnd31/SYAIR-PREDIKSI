@@ -1,28 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Generator Prediksi Bola</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUANGWD DASHBOARD</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
-<h1>⚽ Generator Prediksi Bola</h1>
+<div class="bg"></div>
 
-<textarea id="inputData" placeholder="Contoh:
-UEFA CHAMPIONS LEAGUE
-25/02 00:45 | Atletico Madrid vs Club Brugge
-25/02 03:00 | Arsenal vs Porto
-"></textarea>
+<div class="container">
+
+<h1>RUANGWD DASHBOARD</h1>
+<div id="jamWIB"></div>
+
+<div class="menu">
+<button onclick="showSyair()">SYAIR TOGEL</button>
+<button onclick="showBola()">PREDIKSI BOLA</button>
+</div>
+
+<!-- ================= SYAIR ================= -->
+<div id="syairSection">
+
+<h2>GENERATOR SYAIR</h2>
+
+<select id="pasaran">
+<option value="sydney">SYDNEY</option>
+<option value="singapore">SINGAPORE</option>
+<option value="hongkong">HONGKONG</option>
+<option value="brunei">BRUNEI</option>
+<option value="bangkok">BANGKOK</option>
+<option value="hokidraw">HOKIDRAW</option>
+<option value="kentucky">KENTUCKY</option>
+<option value="kingkong">KINGKONG</option>
+<option value="oregon">OREGON</option>
+<option value="magnum">MAGNUM</option>
+<option value="poipet">POIPET</option>
+<option value="totomali">TOTOMALI</option>
+<option value="totomacau">TOTOMACAU</option>
+<option value="nevada">NEVADA</option>
+<option value="carolina">CAROLINA</option>
+<option value="chelsea">CHELSEA</option>
+<option value="bullseye">BULLSEYE</option>
+<option value="florida">FLORIDA</option>
+<option value="huahin">HUAHIN</option>
+<option value="pcso">PCSO</option>
+</select>
 
 <br>
-<button onclick="generateHTML()">Generate</button>
-<button onclick="copyHTML()">Copy HTML</button>
 
-<h2>Preview</h2>
-<div id="preview"></div>
+<button onclick="generateSyair()">GENERATE</button>
+<button onclick="downloadPNG()">DOWNLOAD PNG</button>
 
-<h2>Hasil HTML Siap Copy</h2>
-<textarea id="htmlOutput" readonly></textarea>
+<div id="hasilSyair"></div>
+
+</div>
+
+<!-- ================= BOLA ================= -->
+<div id="bolaSection" style="display:none;">
+
+<h2>GENERATOR PREDIKSI BOLA</h2>
+
+<input type="text" id="liga" placeholder="Nama Liga">
+<input type="text" id="waktu" placeholder="25/02 02:45 WIB">
+<input type="text" id="tim1" placeholder="Tim Home">
+<input type="text" id="tim2" placeholder="Tim Away">
+<input type="text" id="skor" placeholder="Prediksi Skor (2 - 1)">
+
+<br>
+
+<button onclick="generateBola()">GENERATE</button>
+<button onclick="copyHTML()">COPY HTML</button>
+
+<div id="hasilBola"></div>
+
+<textarea id="htmlOutput" style="width:90%;height:150px;margin-top:15px;"></textarea>
+
+</div>
+
+</div>
 
 <script src="script.js"></script>
 </body>
