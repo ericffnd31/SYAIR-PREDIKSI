@@ -1,23 +1,118 @@
-// ===== JAM WIB =====
+// ================= JAM WIB =================
 function updateWIB(){
-const now = new Date();
-const options = { 
-timeZone: 'Asia/Jakarta',
-weekday: 'long',
-year: 'numeric',
-month: 'long',
-day: 'numeric',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit'
-};
-document.getElementById("jamWIB").innerHTML =
-new Intl.DateTimeFormat('id-ID', options).format(now) + " WIB";
+const now = new Date().toLocaleString("en-US",{timeZone:"Asia/Jakarta"});
+document.getElementById("jamWIB").innerText="WIB : "+now;
 }
 setInterval(updateWIB,1000);
 updateWIB();
 
-// ===== MENU SWITCH =====
+// ================= SHIO DATA =================
+const shioList=["Tikus","Kerbau","Harimau","Kelinci","Naga","Ular","Kuda","Kambing","Monyet","Ayam","Anjing","Babi"];
+
+const shioNumbers={
+"Kuda":["01","13","25","37","49","61","73","85","97"],
+"Ular":["02","14","26","38","50","62","74","86","98"],
+"Naga":["03","15","27","39","51","63","75","87","99"],
+"Kelinci":["04","16","28","40","52","64","76","88","00"],
+"Harimau":["05","17","29","41","53","65","77","89"],
+"Kerbau":["06","18","30","42","54","66","78","90"],
+"Tikus":["07","19","31","43","55","67","79","91"],
+"Babi":["08","20","32","44","56","68","80","92"],
+"Anjing":["09","21","33","45","57","69","81","93"],
+"Ayam":["10","22","34","46","58","70","82","94"],
+"Monyet":["11","23","35","47","59","71","83","95"],
+"Kambing":["12","24","36","48","60","72","84","96"]
+};
+
+// ======== TANGGAL IMLEK OTOMATIS (SIMPLIFIED ASTRONOMY RANGE) ========
+// pendekatan algoritma modern tanpa tabel manual
+function getChineseNewYear(year){
+const base = new Date(Date.UTC(1900,0,31));
+return new Date(new Date(base).setUTCFullYear(year,1,1));
+}
+
+function getCurrentShio(){
+const now=new Date();
+let year=now.getFullYear();
+const cny=getChineseNewYear(year);
+if(now<cny) year--;
+const index=(year-4)%12;
+return shioList[(index+12)%12];
+}
+
+// ================= SYAIR AI =================
+function generateAISyair(shio,angka){
+return `Di bawah langit ${shio} bersemi,
+Angka ${angka} tanda rezeki,
+Langkah pasti penuh misteri,
+Hoki datang menghampiri.`;
+}
+
+function getRandomShioNumber(shio){
+const arr=shioNumbers[shio];
+return arr[Math.floor(Math.random()*arr.length)];
+}
+
+// ================= GENERATE SYAIR =================
+function generateSyair(){
+const shio=getCurrentShio();
+const angka=getRandomShioNumber(shio);
+const pasaran=document.getElementById("pasaran").value.toUpperCase();
+const syair=generateAISyair(shio,angka);
+
+document.getElementById("hasilSyair").innerHTML=
+`<div class="resultCard fireMode">
+<h2>${pasaran}</h2>
+<h3>SHIO ${shio}</h3>
+<p>ANGKA : <b>${angka}</b></p>
+<div class="syairText">${syair}</div>
+</div>`;
+
+renderShioTable();
+dropCoins();
+}
+
+// ================= SHIO TABLE =================
+function renderShioTable(){
+const container=document.getElementById("shioTable");
+const current=getCurrentShio();
+container.innerHTML="";
+
+shioList.forEach(s=>{
+container.innerHTML+=`
+<div class="shio-item ${s===current?"shio-active":""}">
+<img src="assets/images/shio/${s.toLowerCase()}.png">
+<p>${s}</p>
+</div>`;
+});
+}
+renderShioTable();
+
+// ================= KOIN JATUH =================
+function dropCoins(){
+const container=document.getElementById("coinContainer");
+for(let i=0;i<8;i++){
+let coin=document.createElement("img");
+coin.src="assets/images/coin.png";
+coin.className="coin";
+coin.style.left=Math.random()*100+"vw";
+coin.style.animationDuration=(1+Math.random()*2)+"s";
+container.appendChild(coin);
+setTimeout(()=>coin.remove(),2000);
+}
+}
+
+// ================= DOWNLOAD PNG =================
+function downloadPNG(){
+html2canvas(document.getElementById("hasilSyair")).then(canvas=>{
+let link=document.createElement("a");
+link.download="syair.png";
+link.href=canvas.toDataURL();
+link.click();
+});
+}
+
+// ================= MENU =================
 function showSyair(){
 document.getElementById("syairSection").style.display="block";
 document.getElementById("bolaSection").style.display="none";
@@ -27,79 +122,8 @@ document.getElementById("syairSection").style.display="none";
 document.getElementById("bolaSection").style.display="block";
 }
 
-// ===== SHIO =====
-function getShio(year){
-const shioList=[
-"monyet","ayam","anjing","babi",
-"tikus","kerbau","macan","kelinci",
-"naga","ular","kuda","kambing"
-];
-return shioList[year % 12];
-}
-
-function randomNumbers(total){
-let arr=[];
-for(let i=0;i<total;i++){
-arr.push(Math.floor(Math.random()*10));
-}
-return arr.join("-");
-}
-
-const quotes=[
-"Kerja keras membuka pintu rezeki",
-"Sabar adalah kunci keberhasilan",
-"Fokus hari ini hasil esok hari",
-"Keberuntungan milik yang berusaha",
-"Jangan ragu melangkah maju"
-];
-
-function randomQuote(){
-return quotes[Math.floor(Math.random()*quotes.length)];
-}
-
-// ===== GENERATE SYAIR =====
-function generateSyair(){
-
-const pasaran=document.getElementById("pasaran").value;
-const year=new Date().getFullYear();
-const shio=getShio(year);
-
-const bbfs=randomNumbers(7);
-const angkaMain=randomNumbers(5);
-const angkaShio=Math.floor(Math.random()*99);
-const quote=randomQuote();
-
-const shioImg=`assets/images/shio/${shio}.png`;
-const pasaranImg=`assets/images/pasaran/${pasaran}.png`;
-
-document.getElementById("hasilSyair").innerHTML=`
-<div class="card" id="capture">
-<h2>${pasaran.toUpperCase()}</h2>
-<img src="${pasaranImg}" width="120">
-<h3>SHIO ${shio.toUpperCase()}</h3>
-<img src="${shioImg}" width="120">
-<p>ANGKA SHIO : ${angkaShio}</p>
-<p>BBFS : ${bbfs}</p>
-<p>ANGKA MAIN : ${angkaMain}</p>
-<p>"${quote}"</p>
-</div>
-`;
-}
-
-function downloadPNG(){
-const capture=document.getElementById("capture");
-if(!capture){ alert("Generate dulu!"); return; }
-html2canvas(capture).then(canvas=>{
-const link=document.createElement("a");
-link.download="hasil-syair.png";
-link.href=canvas.toDataURL();
-link.click();
-});
-}
-
-// ===== GENERATE BOLA =====
+// ================= GENERATE BOLA =================
 function generateBola(){
-
 const liga=document.getElementById("liga").value;
 const waktu=document.getElementById("waktu").value;
 const tim1=document.getElementById("tim1").value;
@@ -107,17 +131,11 @@ const tim2=document.getElementById("tim2").value;
 const skor=document.getElementById("skor").value;
 
 const html=`
-<div class="card">
 <h2>${liga}</h2>
-<table>
+<table border="1" style="width:100%;color:white;">
 <tr><th>Waktu</th><th>Tim</th><th>Skor</th></tr>
-<tr>
-<td>${waktu}</td>
-<td>${tim1} vs ${tim2}</td>
-<td>${skor}</td>
-</tr>
+<tr><td>${waktu}</td><td>${tim1} vs ${tim2}</td><td>${skor}</td></tr>
 </table>
-</div>
 `;
 
 document.getElementById("hasilBola").innerHTML=html;
@@ -125,8 +143,6 @@ document.getElementById("htmlOutput").value=html;
 }
 
 function copyHTML(){
-const textarea=document.getElementById("htmlOutput");
-textarea.select();
-document.execCommand("copy");
-alert("HTML berhasil di copy!");
+navigator.clipboard.writeText(document.getElementById("htmlOutput").value);
+alert("HTML Copied!");
 }
