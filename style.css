@@ -6,62 +6,46 @@ text-align:center;
 }
 
 .container{
-width:95%;
-max-width:1000px;
-margin:auto;
+padding:20px;
 }
 
 button{
 padding:10px 20px;
 margin:5px;
-background:gold;
+background:red;
+color:white;
 border:none;
 cursor:pointer;
-font-weight:bold;
 }
 
-#hasilSyair{
-margin-top:20px;
-padding:20px;
-background:#111;
-border:2px solid gold;
+button:hover{
+background:darkred;
 }
 
 .shio-grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:10px;
+gap:15px;
 margin-top:20px;
 }
 
-.shio-item{
-padding:10px;
+.shio-card{
 background:#111;
-border:1px solid #333;
+padding:10px;
+border-radius:10px;
 }
 
-.active-shio{
-box-shadow:0 0 15px gold;
-border:2px solid gold;
-}
-
-textarea{
-width:95%;
-height:200px;
-margin-top:20px;
+.shio-card img{
+width:80px;
 }
 
 table{
 width:100%;
-margin-top:20px;
 border-collapse:collapse;
+margin-top:20px;
 }
 
 th,td{
-border:1px solid #444;
+border:1px solid #555;
 padding:8px;
-}
-
-th{
-background:#b00909;
 }
