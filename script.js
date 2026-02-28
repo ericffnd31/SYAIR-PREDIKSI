@@ -1,147 +1,128 @@
 // ================= JAM WIB =================
-function updateJam(){
+setInterval(()=>{
 let now = new Date();
 let wib = new Date(now.toLocaleString("en-US",{timeZone:"Asia/Jakarta"}));
 document.getElementById("jamWIB").innerHTML =
-wib.toLocaleDateString("id-ID") + " " +
-wib.toLocaleTimeString("id-ID") + " WIB";
-}
-setInterval(updateJam,1000);
-updateJam();
+wib.toLocaleDateString("id-ID") + " | " +
+wib.toLocaleTimeString("id-ID");
+},1000);
 
 // ================= MENU =================
 function showSyair(){
 document.getElementById("syairSection").style.display="block";
 document.getElementById("bolaSection").style.display="none";
 }
+
 function showBola(){
 document.getElementById("syairSection").style.display="none";
 document.getElementById("bolaSection").style.display="block";
 }
 
-// ================= DATA SHIO 2026 =================
-const shioData = {
-"Kuda":["01","13","25","37","49","61","73","85","97"],
-"Ular":["02","14","26","38","50","62","74","86","98"],
-"Naga":["03","15","27","39","51","63","75","87","99"],
-"Kelinci":["04","16","28","40","52","64","76","88","00"],
-"Harimau":["05","17","29","41","53","65","77","89"],
-"Kerbau":["06","18","30","42","54","66","78","90"],
-"Tikus":["07","19","31","43","55","67","79","91"],
-"Babi":["08","20","32","44","56","68","80","92"],
-"Anjing":["09","21","33","45","57","69","81","93"],
-"Ayam":["10","22","34","46","58","70","82","94"],
-"Monyet":["11","23","35","47","59","71","83","95"],
-"Kambing":["12","24","36","48","60","72","84","96"]
-};
+// ================= SHIO DATA =================
+const shioData = [
+{name:"Tikus",img:"assets/shio/tikus.png"},
+{name:"Kerbau",img:"assets/shio/kerbau.png"},
+{name:"Macan",img:"assets/shio/macan.png"},
+{name:"Kelinci",img:"assets/shio/kelinci.png"},
+{name:"Naga",img:"assets/shio/naga.png"},
+{name:"Ular",img:"assets/shio/ular.png"},
+{name:"Kuda",img:"assets/shio/kuda.png"},
+{name:"Kambing",img:"assets/shio/kambing.png"},
+{name:"Monyet",img:"assets/shio/monyet.png"},
+{name:"Ayam",img:"assets/shio/ayam.png"},
+{name:"Anjing",img:"assets/shio/anjing.png"},
+{name:"Babi",img:"assets/shio/babi.png"}
+];
 
-// ================= TABEL SHIO =================
-function renderShioTable(active){
-let html="";
-for(let s in shioData){
-html+=`<div class="shio-item ${s===active?"active-shio":""}">
-<b>${s}</b><br>${shioData[s].join(", ")}
-</div>`;
-}
-document.getElementById("shioTable").innerHTML=html;
-}
-renderShioTable("");
+// tampilkan shio
+let table="";
+shioData.forEach(s=>{
+table+=`
+<div class="shio-card">
+<img src="${s.img}">
+<h3>${s.name}</h3>
+</div>
+`;
+});
+document.getElementById("shioTable").innerHTML=table;
+
 
 // ================= GENERATE SYAIR =================
 function generateSyair(){
 
-let pasaran = document.getElementById("pasaran").value.toUpperCase();
-let keys = Object.keys(shioData);
-let shio = keys[Math.floor(Math.random()*keys.length)];
-let angkaList = shioData[shio];
+let pasaran=document.getElementById("pasaran").value;
 
-let angkaMain = angkaList[Math.floor(Math.random()*angkaList.length)];
-let bbfs = angkaMain.split("").join(" ");
+let angka=[];
+while(angka.length<6){
+let n=Math.floor(Math.random()*10);
+if(!angka.includes(n)) angka.push(n);
+}
 
-let syair = `
-Di langit malam ${shio} bersinar terang,<br>
-Angka ${angkaMain} datang bagai pedang,<br>
-Rahasia tersimpan dalam bayang,<br>
-BBFS ${bbfs} menjadi petunjuk yang tenang.
+let syair=`
+<h3>PASARAN ${pasaran.toUpperCase()}</h3>
+<p>BBFS : ${angka.join("")}</p>
+<p>Angka Main : ${angka[0]} ${angka[1]} ${angka[2]}</p>
+<p>
+Bayu malam berbisik pelan,<br>
+Angka turun membawa harapan,<br>
+Jejak shio memberi petunjuk jalan,<br>
+${angka[0]} dan ${angka[1]} jadi pegangan.
+</p>
 `;
 
-document.getElementById("hasilSyair").innerHTML = `
-<h3>${pasaran}</h3>
-<h2>${shio}</h2>
-<div>${syair}</div>
-<br>
-<b>Angka Main:</b> ${angkaMain}<br>
-<b>BBFS:</b> ${bbfs}
-`;
-
-renderShioTable(shio);
-efekKoin();
+document.getElementById("hasilSyair").innerHTML=syair;
 }
 
-// ================= EFEK KOIN =================
-function efekKoin(){
-let container=document.getElementById("coinContainer");
-for(let i=0;i<5;i++){
-let coin=document.createElement("div");
-coin.innerHTML="🪙";
-coin.style.position="fixed";
-coin.style.left=Math.random()*100+"%";
-coin.style.top="-50px";
-coin.style.fontSize="30px";
-coin.style.animation="fall 2s linear";
-document.body.appendChild(coin);
-setTimeout(()=>coin.remove(),2000);
-}
-}
 
-// ================= DOWNLOAD PNG =================
-function downloadPNG(){
-html2canvas(document.getElementById("hasilSyair")).then(canvas=>{
-let link=document.createElement("a");
-link.download="syair.png";
-link.href=canvas.toDataURL();
-link.click();
-});
-}
+// ================= BULK BOLA =================
+function generateBulk(){
 
-// ================= PREDIKSI BOLA =================
-let bolaData=[];
+let text=document.getElementById("bulkInput").value;
+let lines=text.split("\n");
 
-function generateBola(){
-let liga=document.getElementById("liga").value;
-let waktu=document.getElementById("waktu").value;
-let tim1=document.getElementById("tim1").value;
-let tim2=document.getElementById("tim2").value;
-let skor=document.getElementById("skor").value;
-
-bolaData.push({liga,waktu,tim:`${tim1} vs ${tim2}`,skor});
-tampilkanPreview();
-}
-
-function tampilkanPreview(){
 let html="";
-bolaData.forEach(m=>{
-html+=`<table>
-<tr><th colspan="3">${m.liga}</th></tr>
-<tr><td>${m.waktu}</td><td>${m.tim}</td><td>${m.skor}</td></tr>
-</table>`;
+let currentLeague="";
+
+lines.forEach(line=>{
+line=line.trim();
+if(line==="") return;
+
+if(!line.match(/^\d/)){
+if(currentLeague!==""){
+html+="</table></div>";
+}
+currentLeague=line;
+html+=`
+<div class="league-block">
+<h2>${currentLeague}</h2>
+<table>
+<tr><th>Waktu</th><th>Pertandingan</th><th>Prediksi</th></tr>
+`;
+}
+else{
+let match=line.match(/(.*WIB)\s+(.*)\s+(\d+\s*:\s*\d+)/);
+if(match){
+html+=`
+<tr>
+<td>${match[1]}</td>
+<td>${match[2]}</td>
+<td>${match[3]}</td>
+</tr>
+`;
+}
+}
 });
-document.getElementById("hasilBola").innerHTML=html;
+
+if(currentLeague!==""){
+html+="</table></div>";
 }
 
-function copyHTML(){
-let template="";
-bolaData.forEach(m=>{
-template+=`
-<div class="league">
-<h2>${m.liga}</h2>
-<table>
-<tr><th>Waktu</th><th>Tim</th><th>Skor</th></tr>
-<tr><td>${m.waktu}</td><td>${m.tim}</td><td>${m.skor}</td></tr>
-</table>
-</div>`;
-});
-document.getElementById("htmlOutput").value=template;
-navigator.clipboard.writeText(template);
+document.getElementById("hasilBola").innerHTML=html;
+document.getElementById("htmlOutput").value=html;
+}
+
+function copyBulkHTML(){
+let html=document.getElementById("htmlOutput").value;
+navigator.clipboard.writeText(html);
 alert("HTML berhasil di-copy!");
 }
