@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RUANGWD DASHBOARD</title>
 <link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
-<div id="coinContainer"></div>
 <div class="container">
 
 <h1>RUANGWD DASHBOARD</h1>
@@ -31,12 +29,26 @@
 <option value="hongkong">HONGKONG</option>
 <option value="brunei">BRUNEI</option>
 <option value="bangkok">BANGKOK</option>
+<option value="hokidraw">HOKIDRAW</option>
+<option value="kentucky">KENTUCKY</option>
+<option value="kingkong">KINGKONG</option>
+<option value="oregon">OREGON</option>
+<option value="magnum">MAGNUM</option>
+<option value="poipet">POIPET</option>
+<option value="totomali">TOTOMALI</option>
+<option value="totomacau">TOTOMACAU</option>
+<option value="nevada">NEVADA</option>
+<option value="carolina">CAROLINA</option>
+<option value="chelsea">CHELSEA</option>
+<option value="bullseye">BULLSEYE</option>
+<option value="florida">FLORIDA</option>
+<option value="huahin">HUAHIN</option>
+<option value="pcso">PCSO</option>
 </select>
 
 <br><br>
 
 <button onclick="generateSyair()">GENERATE</button>
-<button onclick="downloadPNG()">DOWNLOAD PNG</button>
 
 <div id="hasilSyair"></div>
 
@@ -48,21 +60,19 @@
 <!-- ================= BOLA ================= -->
 <div id="bolaSection" style="display:none;">
 
-<h2>GENERATOR PREDIKSI BOLA</h2>
+<h2>GENERATOR PREDIKSI BOLA AUTO</h2>
 
-<input type="text" id="liga" placeholder="Nama Liga">
-<input type="text" id="waktu" placeholder="25/02 02:45 WIB">
-<input type="text" id="tim1" placeholder="Tim Home">
-<input type="text" id="tim2" placeholder="Tim Away">
-<input type="text" id="skor" placeholder="Prediksi Skor (2 - 1)">
+<textarea id="bulkInput" placeholder="Paste semua pertandingan di sini..." style="width:95%;height:250px;"></textarea>
 
 <br><br>
 
-<button onclick="generateBola()">GENERATE</button>
-<button onclick="copyHTML()">COPY HTML</button>
+<button onclick="generateBulk()">GENERATE HTML</button>
+<button onclick="copyBulkHTML()">COPY HTML</button>
 
 <div id="hasilBola"></div>
-<textarea id="htmlOutput"></textarea>
+<textarea id="htmlOutput" style="width:95%;height:200px;"></textarea>
+
+</div>
 
 </div>
 
